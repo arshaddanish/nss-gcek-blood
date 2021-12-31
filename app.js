@@ -3,14 +3,16 @@ const path = require("path");
 
 const app = express();
 
+app.set('view engine', 'ejs');
+
 app.use(express.static("public"));
 
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "/index.html"));
+  res.render('pages/index');
 });
 
 app.get("/login", function (req, res) {
-  res.sendFile(path.join(__dirname, "/login.html"));
+  res.render('pages/login');
 });
 
 app.listen(3000, function () {
