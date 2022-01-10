@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 
 const app = express();
 
@@ -13,6 +12,10 @@ app.get("/", function (req, res) {
 
 app.get("/login", function (req, res) {
   res.render('pages/login');
+});
+
+app.get("/register", function (req, res) {
+  res.render('pages/register');
 });
 
 app.listen(3000, function () {
