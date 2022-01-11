@@ -6,7 +6,9 @@
       <div class="col-sm-6 wow fadeInLeft" style="float: none; margin: auto">
         <div class="contact-form-block">
           <h2 class="contact-title">Login To Your Account</h2>
-          <% if (messages.error) { %> <%= messages.error %> <% } %>
+          <p class="message">
+            <% if (messages.error) { %> <%= messages.error %> <% } %>
+          </p>
           <form role="form" action="/login" method="POST" id="contact-form">
             <div class="form-group">
               <input

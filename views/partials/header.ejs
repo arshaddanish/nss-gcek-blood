@@ -65,6 +65,12 @@
                     >Account</a
                   >
                 </li>
+
+                <% if (user.admin) { %>
+                <li>
+                  <a href="/data">Download Data</a>
+                </li>
+                <% } %>
               </ul>
             </div>
           </div>

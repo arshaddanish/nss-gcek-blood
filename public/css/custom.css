@@ -2,3 +2,8 @@
   resize: none;
   height: 150px;
 }
+
+.message {
+  color: red;
+  font-weight: 900;
+}
