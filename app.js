@@ -50,14 +50,14 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static("public"));
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.render(
     "pages/index",
     !!req.user ? { isLogged: 1, user: req.user } : { isLogged: 0, user: {} }
   );
 });
 
-app.get("/register", function (req, res) {
+app.get("/register", (req, res) => {
   if (req.user) {
     res.redirect("/logout");
   }
@@ -65,7 +65,7 @@ app.get("/register", function (req, res) {
   res.render("pages/register", { isLogged: 0, user: {} });
 });
 
-app.get("/login", function (req, res) {
+app.get("/login", (req, res) => {
   if (req.user) {
     res.redirect("/logout");
   }
@@ -118,8 +118,40 @@ app.post(
   })
 );
 
-app.get("/user", forwardAuthenticated, function (req, res) {
+app.get("/user", forwardAuthenticated, (req, res) => {
   res.render("pages/user", { user: req.user, isLogged: 1 });
+});
+
+app.post("/user", forwardAuthenticated, async (req, res) => {
+  try {
+    let hash;
+
+    if (!!req.body.password) {
+      hash = await bcrypt.hash(req.body.password, 10);
+    }
+
+    await Users.updateOne(
+      { email: req.user.email },
+      {
+        $set: {
+          name: req.body.name,
+          email: req.body.email,
+          phone: req.body.phone,
+          password: hash ? hash : req.user.password,
+          address: req.body.address,
+          age: req.body.age,
+          height: req.body.height,
+          weight: req.body.weight,
+          blood: !!req.body.blood ? req.body.blood : req.user.blood,
+        },
+      }
+    );
+
+    res.redirect("/user");
+  } catch (e) {
+    console.log(e);
+    res.redirect("/user");
+  }
 });
 
 app.get("/data", forwardAuthenticated, async (req, res) => {

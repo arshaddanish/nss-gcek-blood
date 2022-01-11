@@ -3,8 +3,20 @@
 <!--  HOME SLIDER BLOCK  -->
 
 <div class="slider-wrap">
-  <div id="slider_1" class="owl-carousel" data-nav="true" data-dots="false" data-autoplay="true" data-autoplaytimeout="17000">
-    <div class="slider_item_container" data-bg_img="images/home_1_slider_1.jpg" data-bg_color="#555555" data-bg_opacity="0.0">
+  <div
+    id="slider_1"
+    class="owl-carousel"
+    data-nav="true"
+    data-dots="false"
+    data-autoplay="true"
+    data-autoplaytimeout="17000"
+  >
+    <div
+      class="slider_item_container"
+      data-bg_img="images/home_1_slider_1.jpg"
+      data-bg_color="#555555"
+      data-bg_opacity="0.0"
+    >
       <div class="item">
         <div class="slider-content">
           <div class="container text-left">
@@ -19,7 +31,11 @@
                     <br />
                     IN OTHER PERSON FACE
                   </h2>
-                  <a href="/login" class="btn btn-theme margin-top-24">Login Now</a>
+                  <% if (!isLogged) { %>
+                  <a href="/register" class="btn btn-theme margin-top-24"
+                    >Register Now</a
+                  >
+                  <% } %>
                 </div>
               </div>
               <!-- end .col-sm-12  -->
@@ -34,20 +50,33 @@
     </div>
     <!-- end .slider_item_container  -->
 
-    <div class="slider_item_container" data-bg_img="images/home_1_slider_2.jpg" data-bg_color="#555555" data-bg_opacity="0.0">
+    <div
+      class="slider_item_container"
+      data-bg_img="images/home_1_slider_2.jpg"
+      data-bg_color="#555555"
+      data-bg_opacity="0.0"
+    >
       <div class="item">
         <div class="slider-content">
           <div class="container text-left">
             <div class="row">
-              <div class="slider-bg" data-animation-in="zoomInUp" data-animation-out="zoomInDown">
+              <div
+                class="slider-bg"
+                data-animation-in="zoomInUp"
+                data-animation-out="zoomInDown"
+              >
                 <div class="col-sm-12 wow fadeInDown" data-wow-duration="1s">
-                  <h3>Donate Blood, Save Life!</h3>
+                  <h3>Are You A Active Donor?</h3>
                   <h2>
-                    DONATE BLOOD
+                    THANK YOU
                     <br />
-                    AND INSPIRE OTHERS.
+                    FOR SAVING LIVES.
                   </h2>
-                  <a href="/login" class="btn btn-theme margin-top-24">Login Now</a>
+                  <% if (!isLogged) { %>
+                  <a href="/login" class="btn btn-theme margin-top-24"
+                    >Login Now</a
+                  >
+                  <% } %>
                 </div>
               </div>
               <!-- end .col-sm-12  -->
@@ -74,9 +103,13 @@
       <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
         <div class="about-us-container theme-custom-box-shadow">
           <div class="row section-heading-wrapper margin-bottom-11">
-            <div class="col-lg-12 col-md-12 col-sm-12 text-left no-img-separator">
+            <div
+              class="col-lg-12 col-md-12 col-sm-12 text-left no-img-separator"
+            >
               <h2><strong>Who We Are?</strong></h2>
-              <span class="heading-separator heading-separator-horizontal"></span>
+              <span
+                class="heading-separator heading-separator-horizontal"
+              ></span>
             </div>
             <!-- end .col-sm-10  -->
           </div>
@@ -132,7 +165,11 @@
   <div class="container wow fadeInUp">
     <div class="row no-padding-gallery">
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_1.jpg">
+        <a
+          class="gallery-light-box"
+          data-gall="myGallery"
+          href="images/gallery_1.jpg"
+        >
           <figure class="gallery-img">
             <img src="images/gallery_1.jpg" alt="gallery image" />
           </figure>
@@ -142,7 +179,11 @@
       <!-- end .col-sm-3  -->
 
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_2.jpg">
+        <a
+          class="gallery-light-box"
+          data-gall="myGallery"
+          href="images/gallery_2.jpg"
+        >
           <figure class="gallery-img">
             <img src="images/gallery_2.jpg" alt="gallery image" />
           </figure>
@@ -153,7 +194,11 @@
       <!-- end .col-sm-3  -->
 
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_3.jpg">
+        <a
+          class="gallery-light-box"
+          data-gall="myGallery"
+          href="images/gallery_3.jpg"
+        >
           <figure class="gallery-img">
             <img src="images/gallery_3.jpg" alt="gallery image" />
           </figure>
@@ -166,7 +211,11 @@
 
     <div class="row no-padding-gallery">
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_4.jpg">
+        <a
+          class="gallery-light-box"
+          data-gall="myGallery"
+          href="images/gallery_4.jpg"
+        >
           <figure class="gallery-img">
             <img src="images/gallery_4.jpg" alt="gallery image" />
           </figure>
@@ -177,7 +226,11 @@
       <!-- end .col-sm-3  -->
 
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_5.jpg">
+        <a
+          class="gallery-light-box"
+          data-gall="myGallery"
+          href="images/gallery_5.jpg"
+        >
           <figure class="gallery-img">
             <img src="images/gallery_5.jpg" alt="gallery image" />
           </figure>
@@ -187,7 +240,11 @@
       <!-- end .col-sm-3  -->
 
       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 gallery-container">
-        <a class="gallery-light-box" data-gall="myGallery" href="images/gallery_6.jpg">
+        <a
+          class="gallery-light-box"
+          data-gall="myGallery"
+          href="images/gallery_6.jpg"
+        >
           <figure class="gallery-img">
             <img src="images/gallery_6.jpg" alt="gallery image" />
           </figure>
