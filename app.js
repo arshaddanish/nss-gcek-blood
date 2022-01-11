@@ -23,9 +23,9 @@ initializePassport(
 function forwardAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
+  } else {
+    res.redirect("/login");
   }
-
-  res.redirect("/login");
 }
 
 const app = express();
@@ -123,6 +123,8 @@ app.post("/register", async (req, res) => {
           height: req.body.height,
           weight: req.body.weight,
           blood: req.body.blood,
+          note: req.body.note,
+          date: req.body.date,
           admin: false,
         });
         await user.save();
@@ -157,9 +159,9 @@ app.get("/user", forwardAuthenticated, (req, res) => {
 app.post("/user", forwardAuthenticated, async (req, res) => {
   try {
     const check = await Users.findOne({ email: req.body.email });
-    if (check) {
+    if (req.user.email != req.body.email && check) {
       req.session.user_message = "This email already have an account";
-      res.redirect("/register");
+      res.redirect("/user");
     } else {
       if (
         !req.body.name &&
@@ -171,13 +173,13 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
         !req.body.weight
       ) {
         req.session.user_message = "All fields are required";
-        res.redirect("/register");
+        res.redirect("/user");
       } else if (req.body.age < 18) {
         req.session.user_message = "You must be at least 18 years old";
-        res.redirect("/register");
+        res.redirect("/user");
       } else if (req.body.weight < 45) {
         req.session.user_message = "You must be at least 45 kilo gram";
-        res.redirect("/register");
+        res.redirect("/user");
       } else {
         let hash;
 
@@ -198,6 +200,8 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
               height: req.body.height,
               weight: req.body.weight,
               blood: !!req.body.blood ? req.body.blood : req.user.blood,
+              note: req.body.note,
+              date: req.body.date,
             },
           }
         );
@@ -225,6 +229,8 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
         height: doc.height,
         weight: doc.weight,
         blood: doc.blood,
+        note: doc.note,
+        date: doc.date,
       };
     });
 
@@ -239,6 +245,8 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
           "height",
           "weight",
           "blood",
+          "note",
+          "date",
         ],
       });
       const csv = parser.parse(users);

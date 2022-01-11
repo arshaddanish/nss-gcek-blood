@@ -38,6 +38,8 @@ const Users = mongoose.model("users", {
   height: Number,
   weight: Number,
   blood: String,
+  note: String,
+  date: String,
   admin: Boolean,
 });
 

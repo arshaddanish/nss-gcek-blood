@@ -11,121 +11,126 @@
           </p>
           <form role="form" action="/user" method="POST" id="contact-form">
             <div class="form-group">
+              <label for="name">Name*</label>
               <input
                 type="text"
                 class="form-control"
                 id="user_name"
                 value="<%= user.name %>"
                 name="name"
-                placeholder="Name"
+                placeholder="Please Enter Your Name"
                 data-msg="Please Enter Your Name"
                 required
               />
             </div>
 
             <div class="form-group">
+              <label for="email">Email*</label>
               <input
                 type="email"
                 class="form-control"
                 id="user_email"
                 value="<%= user.email %>"
                 name="email"
-                placeholder="Email"
-                data-msg="Please Enter Your Valid Email"
+                placeholder="Please Enter Your Email"
+                data-msg="Please Enter Your Email"
                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                 required
               />
             </div>
 
             <div class="form-group">
+              <label for="phone">Phone Number* (Whatsapp)</label>
               <input
                 type="tel"
                 class="form-control"
                 id="user_phone"
                 value="<%= user.phone %>"
                 name="phone"
-                placeholder="Phone Number (Whatsapp)"
-                data-msg="Please Enter Your Valid Phone Number"
+                placeholder="Please Enter Your Valid Phone Number"
+                data-msg="Please Enter Your Phone Number"
                 pattern="[1-9]{1}[0-9]{9}"
                 required
               />
             </div>
 
             <div class="form-group">
+              <label for="password">Password (leave blank to not change)</label>
               <input
                 type="password"
                 class="form-control"
                 id="password"
                 name="password"
-                placeholder="Password (leave blank to not change)"
-                data-msg="Please Enter Your Correct Password"
+                placeholder="Please Enter Your Password"
+                data-msg="Please Enter Your Password"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
               />
             </div>
 
             <div class="form-group">
+              <label for="address">Address*</label>
               <textarea
                 class="form-control"
                 id="user_address"
                 name="address"
-                placeholder="Address"
+                placeholder="Please Enter Your Address"
                 data-msg="Please Enter Your Address"
                 required
-              >
-<%= user.address %>
-            </textarea
-              >
+              ><%= user.address %></textarea>
             </div>
 
             <div class="form-group">
+              <label for="age">Age*</label>
               <input
                 type="number"
                 class="form-control"
                 id="user_age"
                 value="<%= user.age %>"
                 name="age"
-                placeholder="Age"
+                placeholder="Please Enter Your Age"
                 data-msg="Please Enter Your Age"
                 required
               />
             </div>
 
             <div class="form-group">
+              <label for="height">Height* (in cm)</label>
               <input
                 type="number"
                 class="form-control"
                 id="user_height"
                 value="<%= user.height %>"
                 name="height"
-                placeholder="Height (in cm)"
+                placeholder="Please Enter Your Height"
                 data-msg="Please Enter Your Height"
                 required
               />
             </div>
 
             <div class="form-group">
+              <label for="weight">Weight* (in kg)</label>
               <input
                 type="number"
                 class="form-control"
                 id="user_weight"
                 value="<%= user.weight %>"
                 name="weight"
-                placeholder="Weight (in kg)"
+                placeholder="Please Enter Your Weight"
                 data-msg="Please Enter Your Weight"
                 required
               />
             </div>
 
             <div class="form-group">
+              <label for="blood">Blood Group*</label>
               <select
                 class="form-control"
                 id="user_blood"
                 name="blood"
                 data-msg="Please Select Your Blood Group"
-                required
               >
                 <option value="" disabled selected hidden>
-                  Blood Group: <%= user.blood + "ve" %>
+                  Blood Group*: <%= user.blood + "ve" %>
                 </option>
                 <option value="A+">A +ve</option>
                 <option value="A-">A -ve</option>
@@ -137,6 +142,30 @@
                 <option value="O-">O -ve</option>
               </select>
             </div>
+
+            <div class="form-group">
+              <label for="note">Any diseases or medication?</label>
+              <textarea
+                class="form-control"
+                id="user_note"
+                name="note"
+                placeholder="Anything to add?"
+                data-msg="Anything to add?"
+              ><%= user.note %></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="date">Date of last donation (If donated)</label>
+              <input
+                type="date"
+                class="form-control"
+                id="user_date"
+                value="<%= user.date %>"
+                name="date"
+                value=""
+                placeholder="Please Enter Donated Date"
+                data-msg="Please Enter Donated Date"
+              />
 
             <div class="form-group">
               <button type="submit" class="btn btn-theme">

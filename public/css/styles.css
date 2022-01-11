@@ -301,6 +301,7 @@ input[type="submit"],
 input[type="button"],
 input[type="number"],
 input[type="tel"],
+input[type="date"],
 select,
 textarea {
   -webkit-border-radius: 0;
@@ -318,6 +319,7 @@ input[type="password"]:focus,
 input[type="submit"]:focus,
 input[type="button"]:focus,
 input[type="tel"]:focus,
+input[type="date"]:focus,
 input[type="number"]:focus,
 select:focus,
 textarea:focus {
@@ -721,6 +723,7 @@ a.btn-load-more:hover {
 #contact-form .p-errors input[type="email"],
 #contact-form .p-errors input[type="number"],
 #contact-form .p-errors input[type="tel"],
+#contact-form .p-errors input[type="date"],
 #contact-form .p-errors select,
 #contact-form .p-errors textarea {
   border-color: lightcoral;
@@ -2877,6 +2880,7 @@ a.btn-cta-3:hover {
 .appoinment-form input[type="url"],
 .appoinment-form input[type="password"],
 .appoinment-form input[type="tel"],
+.appoinment-form input[type="date"],
 .appoinment-form input[type="number"],
 .appoinment-form select {
   border: 0px;
@@ -2906,6 +2910,7 @@ a.btn-cta-3:hover {
 .appoinment-form input[type="url"]:focus,
 .appoinment-form input[type="password"]:focus,
 .appoinment-form input[type="tel"]:focus,
+.appoinment-form input[type="date"]:focus,
 .appoinment-form input[type="number"]:focus,
 .appoinment-form select:focus {
   -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.16);
@@ -3210,6 +3215,7 @@ a.btn-cta-3:hover {
 #contact-form input[type="url"],
 #contact-form input[type="password"],
 #contact-form input[type="tel"],
+#contact-form input[type="date"],
 #contact-form input[type="number"],
 #contact-form select {
   border: 0px;
@@ -3240,6 +3246,7 @@ a.btn-cta-3:hover {
 #contact-form input[type="url"]:focus,
 #contact-form input[type="password"]:focus,
 #contact-form input[type="tel"]:focus,
+#contact-form input[type="date"]:focus,
 #contact-form input[type="number"]:focus,
 #contact-form select:focus {
   -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.16);
@@ -3838,6 +3845,7 @@ ul.pagination li:last-child {
 #comment-form input[type="url"],
 #comment-form input[type="password"],
 #comment-form input[type="tel"],
+#comment-form input[type="date"],
 #comment-form input[type="number"],
 #comment-form select {
   border: 0px;
@@ -3868,6 +3876,7 @@ ul.pagination li:last-child {
 #comment-form input[type="url"]:focus,
 #comment-form input[type="password"]:focus,
 #comment-form input[type="tel"]:focus,
+#comment-form input[type="date"]:focus,
 #comment-form input[type="number"]:focus,
 #comment-form select:focus {
   -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.16);
