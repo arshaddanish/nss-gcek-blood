@@ -260,6 +260,36 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
   }
 });
 
+app.get("/hidden", forwardAuthenticated, async (req, res) => {
+  if (req.user.admin) {
+    res.render("pages/hidden");
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/hidden", forwardAuthenticated, async (req, res) => {
+  if (req.user.admin) {
+    const check = await Users.findOne({ email: req.body.email });
+    if (check) {
+      await Users.updateOne(
+        { email: req.body.email },
+        {
+          $set: {
+            admin: true,
+          },
+        }
+      );
+
+      res.send("Now user with this email is a admin");
+    } else {
+      res.send("This email have no account");
+    }
+  } else {
+    res.redirect("/login");
+  }
+});
+
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port 3000");
 });
