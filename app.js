@@ -60,17 +60,23 @@ app.get("/", (req, res) => {
 app.get("/register", (req, res) => {
   if (req.user) {
     res.redirect("/logout");
+  } else {
+    let temp = req.session.register_message;
+    req.session.register_message = "";
+    res.render("pages/register", {
+      isLogged: 0,
+      user: {},
+      messages: { error: temp },
+    });
   }
-
-  res.render("pages/register", { isLogged: 0, user: {} });
 });
 
 app.get("/login", (req, res) => {
   if (req.user) {
     res.redirect("/logout");
+  } else {
+    res.render("pages/login", { isLogged: 0, user: {} });
   }
-
-  res.render("pages/login", { isLogged: 0, user: {} });
 });
 
 app.get("/logout", forwardAuthenticated, (req, res) => {
@@ -80,28 +86,48 @@ app.get("/logout", forwardAuthenticated, (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const hash = await bcrypt.hash(req.body.password, 10);
     const check = await Users.findOne({ email: req.body.email });
     if (check) {
-      res.redirect("/register", {
-        message: "This email already have an account",
-      });
+      req.session.register_message = "This email already have an account";
+      res.redirect("/register");
     } else {
-      const user = new Users({
-        id: Date.now().toString(),
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        password: hash,
-        address: req.body.address,
-        age: req.body.age,
-        height: req.body.height,
-        weight: req.body.weight,
-        blood: req.body.blood,
-        admin: false,
-      });
-      await user.save();
-      res.redirect("/login");
+      if (
+        !req.body.name &&
+        !req.body.email &&
+        !req.body.phone &&
+        !req.body.password &&
+        !req.body.address &&
+        !req.body.age &&
+        !req.body.height &&
+        !req.body.weight &&
+        !req.body.blood
+      ) {
+        req.session.register_message = "All fields are required";
+        res.redirect("/register");
+      } else if (req.body.age < 18) {
+        req.session.register_message = "You must be at least 18 years old";
+        res.redirect("/register");
+      } else if (req.body.weight < 45) {
+        req.session.register_message = "You must be at least 45 kilo gram";
+        res.redirect("/register");
+      } else {
+        const hash = await bcrypt.hash(req.body.password, 10);
+        const user = new Users({
+          id: Date.now().toString(),
+          name: req.body.name,
+          email: req.body.email,
+          phone: req.body.phone,
+          password: hash,
+          address: req.body.address,
+          age: req.body.age,
+          height: req.body.height,
+          weight: req.body.weight,
+          blood: req.body.blood,
+          admin: false,
+        });
+        await user.save();
+        res.redirect("/login");
+      }
     }
   } catch (e) {
     console.log(e);
@@ -119,35 +145,66 @@ app.post(
 );
 
 app.get("/user", forwardAuthenticated, (req, res) => {
-  res.render("pages/user", { user: req.user, isLogged: 1 });
+  let temp = req.session.user_message;
+  req.session.user_message = "";
+  res.render("pages/user", {
+    isLogged: 1,
+    user: req.user,
+    messages: { error: temp },
+  });
 });
 
 app.post("/user", forwardAuthenticated, async (req, res) => {
   try {
-    let hash;
+    const check = await Users.findOne({ email: req.body.email });
+    if (check) {
+      req.session.user_message = "This email already have an account";
+      res.redirect("/register");
+    } else {
+      if (
+        !req.body.name &&
+        !req.body.email &&
+        !req.body.phone &&
+        !req.body.address &&
+        !req.body.age &&
+        !req.body.height &&
+        !req.body.weight
+      ) {
+        req.session.user_message = "All fields are required";
+        res.redirect("/register");
+      } else if (req.body.age < 18) {
+        req.session.user_message = "You must be at least 18 years old";
+        res.redirect("/register");
+      } else if (req.body.weight < 45) {
+        req.session.user_message = "You must be at least 45 kilo gram";
+        res.redirect("/register");
+      } else {
+        let hash;
 
-    if (!!req.body.password) {
-      hash = await bcrypt.hash(req.body.password, 10);
-    }
+        if (!!req.body.password) {
+          hash = await bcrypt.hash(req.body.password, 10);
+        }
 
-    await Users.updateOne(
-      { email: req.user.email },
-      {
-        $set: {
-          name: req.body.name,
-          email: req.body.email,
-          phone: req.body.phone,
-          password: hash ? hash : req.user.password,
-          address: req.body.address,
-          age: req.body.age,
-          height: req.body.height,
-          weight: req.body.weight,
-          blood: !!req.body.blood ? req.body.blood : req.user.blood,
-        },
+        await Users.updateOne(
+          { email: req.user.email },
+          {
+            $set: {
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              password: hash ? hash : req.user.password,
+              address: req.body.address,
+              age: req.body.age,
+              height: req.body.height,
+              weight: req.body.weight,
+              blood: !!req.body.blood ? req.body.blood : req.user.blood,
+            },
+          }
+        );
+
+        res.redirect("/user");
       }
-    );
-
-    res.redirect("/user");
+    }
   } catch (e) {
     console.log(e);
     res.redirect("/user");
