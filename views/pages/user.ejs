@@ -5,14 +5,15 @@
     <div class="row">
       <div class="col-sm-6 wow fadeInLeft" style="float: none; margin: auto">
         <div class="contact-form-block">
-          <h2 class="contact-title">Register For An Account</h2>
+          <h2 class="contact-title">User Details</h2>
           <% if (messages.error) { %> <%= messages.error %> <% } %>
-          <form role="form" action="/register" method="POST" id="contact-form">
+          <form role="form" action="/user" method="POST" id="contact-form">
             <div class="form-group">
               <input
                 type="text"
                 class="form-control"
                 id="user_name"
+                value="<%= user.name %>"
                 name="name"
                 placeholder="Name"
                 data-msg="Please Enter Your Name"
@@ -25,6 +26,7 @@
                 type="email"
                 class="form-control"
                 id="user_email"
+                value="<%= user.email %>"
                 name="email"
                 placeholder="Email"
                 data-msg="Please Enter Your Valid Email"
@@ -38,6 +40,7 @@
                 type="tel"
                 class="form-control"
                 id="user_phone"
+                value="<%= user.phone %>"
                 name="phone"
                 placeholder="Phone Number (Whatsapp)"
                 data-msg="Please Enter Your Valid Phone Number"
@@ -52,10 +55,9 @@
                 class="form-control"
                 id="password"
                 name="password"
-                placeholder="Password"
+                placeholder="Password (leave blank to not change)"
                 data-msg="Please Enter Your Correct Password"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                required
               />
             </div>
 
@@ -67,7 +69,10 @@
                 placeholder="Address"
                 data-msg="Please Enter Your Address"
                 required
-              ></textarea>
+              >
+<%= user.address %>
+            </textarea
+              >
             </div>
 
             <div class="form-group">
@@ -75,6 +80,7 @@
                 type="number"
                 class="form-control"
                 id="user_age"
+                value="<%= user.age %>"
                 name="age"
                 placeholder="Age"
                 data-msg="Please Enter Your Age"
@@ -87,6 +93,7 @@
                 type="number"
                 class="form-control"
                 id="user_height"
+                value="<%= user.height %>"
                 name="height"
                 placeholder="Height (in cm)"
                 data-msg="Please Enter Your Height"
@@ -99,6 +106,7 @@
                 type="number"
                 class="form-control"
                 id="user_weight"
+                value="<%= user.weight %>"
                 name="weight"
                 placeholder="Weight (in kg)"
                 data-msg="Please Enter Your Weight"
@@ -114,7 +122,9 @@
                 data-msg="Please Select Your Blood Group"
                 required
               >
-                <option value="" disabled selected hidden>Blood Group</option>
+                <option value="" disabled selected hidden>
+                  Blood Group: <%= user.blood + "ve" %>
+                </option>
                 <option value="A+">A +ve</option>
                 <option value="A-">A -ve</option>
                 <option value="B+">B +ve</option>
@@ -126,12 +136,10 @@
               </select>
             </div>
 
-            <div>
-              <p>Already have an account? <a href="/login">&nbsp;Login</a></p>
-            </div>
-
             <div class="form-group">
-              <button type="submit" class="btn btn-theme">Register Now</button>
+              <button type="submit" class="btn btn-theme">
+                Update Details
+              </button>
             </div>
           </form>
         </div>
