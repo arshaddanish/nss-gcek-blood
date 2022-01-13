@@ -123,7 +123,7 @@ app.post("/register", async (req, res) => {
           height: req.body.height,
           weight: req.body.weight,
           blood: req.body.blood,
-          note: req.body.note,
+          note: req.body.note.replace(/\n/g, ","),
           date: req.body.date,
           admin: false,
         });
@@ -200,7 +200,7 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
               height: req.body.height,
               weight: req.body.weight,
               blood: !!req.body.blood ? req.body.blood : req.user.blood,
-              note: req.body.note,
+              note: req.body.note.replace(/\n/g, ","),
               date: req.body.date,
             },
           }
@@ -231,6 +231,7 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
         blood: doc.blood,
         note: doc.note,
         date: doc.date,
+        admin: doc.admin,
       };
     });
 
@@ -247,6 +248,7 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
           "blood",
           "note",
           "date",
+          "admin",
         ],
       });
       const csv = parser.parse(users);
@@ -323,7 +325,9 @@ app.get("/admin", forwardAuthenticated, async (req, res) => {
 
 app.get("/view-data", forwardAuthenticated, async (req, res) => {
   if (req.user.admin) {
-    let users = await Users.find();
+    let users = await Users.find(
+      req.query.filter ? { blood: req.query.filter } : {}
+    );
 
     users = users.map((doc) => {
       return {
@@ -337,8 +341,38 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
         blood: doc.blood,
         note: doc.note,
         date: doc.date,
+        admin: doc.admin,
       };
     });
+
+    if (req.query.sort && req.query.order) {
+      if (["age", "height", "weight"].includes(req.query.sort)) {
+        users = users.sort((a, b) => {
+          return req.query.order == "ac"
+            ? a[req.query.sort] - b[req.query.sort]
+            : b[req.query.sort] - a[req.query.sort];
+        });
+      } else {
+        users = users.sort((a, b) => {
+          let fa = a[req.query.sort].toLowerCase(),
+            fb = b[req.query.sort].toLowerCase();
+
+          if (fa < fb) {
+            return -1;
+          }
+
+          if (fa > fb) {
+            return 1;
+          }
+
+          return 0;
+        });
+
+        if (req.query.order == "ac") {
+          users = users.reverse();
+        }
+      }
+    }
 
     try {
       const parser = new Parser({
@@ -353,6 +387,7 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
           "blood",
           "note",
           "date",
+          "admin",
         ],
       });
       const csv = parser.parse(users);

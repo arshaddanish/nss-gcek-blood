@@ -24,6 +24,37 @@
   }
 </style>
 <a href="/data" target="_blank"><button>Download Data</button></a>
+<form action="/view-data" method="GET">
+  <label for="sort">Sort By:</label>
+  <select name="sort" id="sort">
+    <option value="name" selected>Name</option>
+    <option value="email">Email</option>
+    <option value="age">Age</option>
+    <option value="height">Height</option>
+    <option value="weight">Weight</option>
+    <option value="blood">Blood type</option>
+    <option value="date">Date of donation</option>
+    <option value="admin">Admin</option>
+  </select>
+  <label for="order">Order:</label>
+  <select name="order" id="order">
+    <option value="ac" selected>Ascending</option>
+    <option value="dc">Descending</option>
+  </select>
+  <label for="filter">Blood filter:</label>
+  <select name="filter" id="filter">
+    <option value="" selected disabled hidden>None</option>
+    <option value="A+">A +ve</option>
+    <option value="A-">A -ve</option>
+    <option value="B+">B +ve</option>
+    <option value="B-">B -ve</option>
+    <option value="AB+">AB +ve</option>
+    <option value="AB-">AB -ve</option>
+    <option value="O+">O +ve</option>
+    <option value="O-">O -ve</option>
+  </select>
+  <input type="submit" />
+</form>
 <table id="csv">
   <%- csv %>
 </table>
