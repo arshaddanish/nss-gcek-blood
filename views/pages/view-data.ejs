@@ -53,6 +53,8 @@
     <option value="O+">O +ve</option>
     <option value="O-">O -ve</option>
   </select>
+  <input type="checkbox" id="mos" name="mos" />
+  <label for="mos">Hide people who donated within 3 months</label>
   <input type="submit" />
 </form>
 <table id="csv">
@@ -75,6 +77,7 @@
   let sort = urlParams.get("sort");
   let order = urlParams.get("order");
   let filter = urlParams.get("filter");
+  let mos = urlParams.get("mos");
 
   if (sort) {
     select("sort", sort);
@@ -86,5 +89,9 @@
 
   if (filter) {
     select("filter", filter);
+  }
+
+  if (mos) {
+    document.getElementById("mos").checked = true;
   }
 </script>

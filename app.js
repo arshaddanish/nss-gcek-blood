@@ -223,49 +223,58 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
 
 app.get("/data", forwardAuthenticated, async (req, res) => {
   if (req.user.admin) {
-    let users = await Users.find();
+    if (req.session.csv) {
+      try {
+        res.set({ "Content-disposition": "attachment; filename=export.csv" });
+        res.send(req.session.csv);
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      let users = await Users.find();
 
-    users = users.map((doc) => {
-      return {
-        name: doc.name,
-        email: doc.email,
-        phone: doc.phone,
-        address: doc.address,
-        age: doc.age,
-        height: doc.height,
-        weight: doc.weight,
-        batch: doc.batch,
-        branch: doc.branch,
-        blood: doc.blood,
-        note: doc.note,
-        date: doc.date,
-        admin: doc.admin,
-      };
-    });
-
-    try {
-      const parser = new Parser({
-        fields: [
-          "name",
-          "email",
-          "phone",
-          "address",
-          "age",
-          "height",
-          "weight",
-          "batch",
-          "branch",
-          "blood",
-          "note",
-          "date",
-          "admin",
-        ],
+      users = users.map((doc) => {
+        return {
+          name: doc.name,
+          email: doc.email,
+          phone: doc.phone,
+          address: doc.address,
+          age: doc.age,
+          height: doc.height,
+          weight: doc.weight,
+          batch: doc.batch,
+          branch: doc.branch,
+          blood: doc.blood,
+          note: doc.note,
+          date: doc.date,
+          admin: doc.admin,
+        };
       });
-      const csv = parser.parse(users);
-      res.set({ "Content-disposition": "attachment; filename=export.csv" });
-      res.send(csv);
-    } catch (e) {
-      console.log(e);
+
+      try {
+        const parser = new Parser({
+          fields: [
+            "name",
+            "email",
+            "phone",
+            "address",
+            "age",
+            "height",
+            "weight",
+            "batch",
+            "branch",
+            "blood",
+            "note",
+            "date",
+            "admin",
+          ],
+        });
+        const csv = parser.parse(users);
+        res.set({ "Content-disposition": "attachment; filename=export.csv" });
+        res.send(csv);
+      } catch (e) {
+        console.log(e);
+      }
     }
   } else {
     res.redirect("/login");
@@ -417,6 +426,19 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
       }
     }
 
+    if (req.query.mos) {
+      users = users.filter((a) => {
+        if (!a.date) {
+          return true;
+        }
+
+        a = new Date(a.date);
+        let b = new Date();
+        console.log(b, (b - a) / 90);
+        return (b - a) / 90 >= 86400000 ? true : false;
+      });
+    }
+
     try {
       const parser = new Parser({
         fields: [
@@ -436,6 +458,7 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
         ],
       });
       const csv = parser.parse(users);
+      req.session.csv = csv;
       let table = "";
       const rows = csv.split("\n");
       for (var i = 0; i < rows.length; i++) {
