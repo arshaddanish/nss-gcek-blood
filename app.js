@@ -100,6 +100,8 @@ app.post("/register", async (req, res) => {
         !req.body.age &&
         !req.body.height &&
         !req.body.weight &&
+        !req.body.batch &&
+        !req.body.branch &&
         !req.body.blood
       ) {
         req.session.register_message = "All fields are required";
@@ -122,6 +124,8 @@ app.post("/register", async (req, res) => {
           age: req.body.age,
           height: req.body.height,
           weight: req.body.weight,
+          batch: req.body.batch,
+          branch: req.body.branch,
           blood: req.body.blood,
           note: req.body.note.replace(/\n/g, ","),
           date: req.body.date,
@@ -199,6 +203,8 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
               age: req.body.age,
               height: req.body.height,
               weight: req.body.weight,
+              batch: !!req.body.batch ? req.body.batch : req.user.batch,
+              branch: !!req.body.branch ? req.body.branch : req.user.branch,
               blood: !!req.body.blood ? req.body.blood : req.user.blood,
               note: req.body.note.replace(/\n/g, ","),
               date: req.body.date,
@@ -228,6 +234,8 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
         age: doc.age,
         height: doc.height,
         weight: doc.weight,
+        batch: doc.batch,
+        branch: doc.branch,
         blood: doc.blood,
         note: doc.note,
         date: doc.date,
@@ -245,6 +253,8 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
           "age",
           "height",
           "weight",
+          "batch",
+          "branch",
           "blood",
           "note",
           "date",
@@ -338,6 +348,8 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
         age: doc.age,
         height: doc.height,
         weight: doc.weight,
+        batch: doc.batch,
+        branch: doc.branch,
         blood: doc.blood,
         note: doc.note,
         date: doc.date,
@@ -384,6 +396,8 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
           "age",
           "height",
           "weight",
+          "batch",
+          "branch",
           "blood",
           "note",
           "date",

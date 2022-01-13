@@ -122,6 +122,43 @@
             </div>
 
             <div class="form-group">
+              <label for="batch">Batch*</label>
+              <select
+                class="form-control"
+                id="user_batch"
+                name="batch"
+                data-msg="Please Select Your Batch"
+              >
+                <option value="" disabled selected hidden>
+                  Batch: <%= user.batch %>
+                </option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="branch">Branch*</label>
+              <select
+                class="form-control"
+                id="user_branch"
+                name="branch"
+                data-msg="Please Select Your Branch"
+              >
+                <option value="" disabled selected hidden>
+                  Branch: <%= user.branch %>
+                </option>
+                <option value="CE">CE</option>
+                <option value="CSE">CSE</option>
+                <option value="EEE">EEE</option>
+                <option value="ECE">ECE</option>
+                <option value="ME">ME</option>
+              </select>
+            </div>
+
+            <div class="form-group">
               <label for="blood">Blood Group*</label>
               <select
                 class="form-control"
@@ -130,7 +167,7 @@
                 data-msg="Please Select Your Blood Group"
               >
                 <option value="" disabled selected hidden>
-                  Blood Group*: <%= user.blood + "ve" %>
+                  Blood Group: <%= user.blood + "ve" %>
                 </option>
                 <option value="A+">A +ve</option>
                 <option value="A-">A -ve</option>

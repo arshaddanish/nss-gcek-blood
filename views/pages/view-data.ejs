@@ -58,3 +58,33 @@
 <table id="csv">
   <%- csv %>
 </table>
+<script>
+  function select(selectId, optionValToSelect) {
+    var selectElement = document.getElementById(selectId);
+    var selectOptions = selectElement.options;
+    for (var opt, j = 0; (opt = selectOptions[j]); j++) {
+      if (opt.value == optionValToSelect) {
+        selectElement.selectedIndex = j;
+        break;
+      }
+    }
+  }
+
+  const url = window.location.search;
+  const urlParams = new URLSearchParams(url);
+  let sort = urlParams.get("sort");
+  let order = urlParams.get("order");
+  let filter = urlParams.get("filter");
+
+  if (sort) {
+    select("sort", sort);
+  }
+
+  if (order) {
+    select("order", order);
+  }
+
+  if (filter) {
+    select("filter", filter);
+  }
+</script>

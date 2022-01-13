@@ -37,6 +37,8 @@ const Users = mongoose.model("users", {
   age: Number,
   height: Number,
   weight: Number,
+  batch: String,
+  branch: String,
   blood: String,
   note: String,
   date: String,
