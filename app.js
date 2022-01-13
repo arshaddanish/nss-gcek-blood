@@ -290,6 +290,37 @@ app.post("/make-admin", forwardAuthenticated, async (req, res) => {
   }
 });
 
+app.get("/delete-user", forwardAuthenticated, async (req, res) => {
+  if (req.user.admin) {
+    res.render("pages/delete-user");
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/delete-user", forwardAuthenticated, async (req, res) => {
+  if (req.user.admin) {
+    const check = await Users.findOne({ email: req.body.email });
+    if (check) {
+      await Users.deleteOne({ email: req.body.email });
+
+      res.send("Now user with this email deleted");
+    } else {
+      res.send("This email have no account");
+    }
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.get("/admin", forwardAuthenticated, async (req, res) => {
+  if (req.user.admin) {
+    res.render("pages/admin");
+  } else {
+    res.redirect("/login");
+  }
+});
+
 app.get("/view-data", forwardAuthenticated, async (req, res) => {
   if (req.user.admin) {
     let users = await Users.find();

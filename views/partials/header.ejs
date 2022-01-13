@@ -53,13 +53,19 @@
                   <a href="/">Home</a>
                 </li>
 
-                <li><a href="/#about" title="About Us">About Us</a></li>
-
+                <% if (!user.admin) { %>
+                <li>
+                  <a href="/#about" title="About Us">About Us</a>
+                </li>
+                <% } %> <% if (!user.admin) { %>
                 <li>
                   <a href="/#gallery">Gallery</a>
                 </li>
-
-                <li><a href="/#footer">Contact</a></li>
+                <% } %> <% if (!user.admin) { %>
+                <li>
+                  <a href="/#footer">Contact</a>
+                </li>
+                <% } %>
 
                 <li>
                   <a
@@ -71,6 +77,10 @@
                 <% if (isLogged) { %>
                 <li>
                   <a href="/logout">Logout</a>
+                </li>
+                <% } %> <% if (isLogged) { %>
+                <li>
+                  <a href="/admin">Admin</a>
                 </li>
                 <% } %> <% if (user.admin) { %>
                 <li>
