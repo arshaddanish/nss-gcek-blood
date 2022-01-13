@@ -68,9 +68,13 @@
                   >
                 </li>
 
-                <% if (user.admin) { %>
+                <% if (isLogged) { %>
                 <li>
-                  <a href="/data">Download Data</a>
+                  <a href="/logout">Logout</a>
+                </li>
+                <% } %> <% if (user.admin) { %>
+                <li>
+                  <a href="/view-data">View Data</a>
                 </li>
                 <% } %>
               </ul>

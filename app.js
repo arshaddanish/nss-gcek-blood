@@ -118,7 +118,7 @@ app.post("/register", async (req, res) => {
           email: req.body.email,
           phone: req.body.phone,
           password: hash,
-          address: req.body.address,
+          address: req.body.address.replace(/\n/g, ","),
           age: req.body.age,
           height: req.body.height,
           weight: req.body.weight,
@@ -195,7 +195,7 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
               email: req.body.email,
               phone: req.body.phone,
               password: hash ? hash : req.user.password,
-              address: req.body.address,
+              address: req.body.address.replace(/\n/g, ","),
               age: req.body.age,
               height: req.body.height,
               weight: req.body.weight,
@@ -260,15 +260,15 @@ app.get("/data", forwardAuthenticated, async (req, res) => {
   }
 });
 
-app.get("/hidden", forwardAuthenticated, async (req, res) => {
+app.get("/make-admin", forwardAuthenticated, async (req, res) => {
   if (req.user.admin) {
-    res.render("pages/hidden");
+    res.render("pages/make-admin");
   } else {
     res.redirect("/login");
   }
 });
 
-app.post("/hidden", forwardAuthenticated, async (req, res) => {
+app.post("/make-admin", forwardAuthenticated, async (req, res) => {
   if (req.user.admin) {
     const check = await Users.findOne({ email: req.body.email });
     if (check) {
@@ -284,6 +284,66 @@ app.post("/hidden", forwardAuthenticated, async (req, res) => {
       res.send("Now user with this email is a admin");
     } else {
       res.send("This email have no account");
+    }
+  } else {
+    res.redirect("/login");
+  }
+});
+
+app.get("/view-data", forwardAuthenticated, async (req, res) => {
+  if (req.user.admin) {
+    let users = await Users.find();
+
+    users = users.map((doc) => {
+      return {
+        name: doc.name,
+        email: doc.email,
+        phone: doc.phone,
+        address: doc.address,
+        age: doc.age,
+        height: doc.height,
+        weight: doc.weight,
+        blood: doc.blood,
+        note: doc.note,
+        date: doc.date,
+      };
+    });
+
+    try {
+      const parser = new Parser({
+        fields: [
+          "name",
+          "email",
+          "phone",
+          "address",
+          "age",
+          "height",
+          "weight",
+          "blood",
+          "note",
+          "date",
+        ],
+      });
+      const csv = parser.parse(users);
+      let table = "";
+      const rows = csv.split("\n");
+      for (var i = 0; i < rows.length; i++) {
+        var cells = rows[i].split(",");
+        if (cells.length > 1) {
+          table += "<tr>";
+          for (var j = 0; j < cells.length; j++) {
+            if (cells[j][0] == '"') {
+              cells[j] = cells[j].slice(1, -1);
+            }
+            table += i ? `<td>${cells[j]}</td>` : `<th>${cells[j]}</th>`;
+          }
+          table += "<tr>";
+        }
+      }
+      res.render("pages/view-data", { csv: table });
+    } catch (e) {
+      console.log(e);
+      res.redirect("/login");
     }
   } else {
     res.redirect("/login");
