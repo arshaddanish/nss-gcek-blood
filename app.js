@@ -364,6 +364,37 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
             ? a[req.query.sort] - b[req.query.sort]
             : b[req.query.sort] - a[req.query.sort];
         });
+      } else if (req.query.sort == "date") {
+        users = users.sort((a, b) => {
+          if (!a.date && !b.date) {
+            return 0;
+          }
+
+          if (!a.date) {
+            return 1;
+          }
+
+          if (!b.date) {
+            return -1;
+          }
+
+          a = new Date(a.date);
+          b = new Date(b.date);
+
+          if (b > a) {
+            return -1;
+          }
+
+          if (a > b) {
+            return 1;
+          }
+
+          return 0;
+        });
+
+        if (req.query.order == "dc") {
+          users = users.reverse();
+        }
       } else {
         users = users.sort((a, b) => {
           let fa = a[req.query.sort].toLowerCase(),
