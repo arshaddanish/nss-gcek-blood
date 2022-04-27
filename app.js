@@ -406,8 +406,15 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
         }
       } else {
         users = users.sort((a, b) => {
-          let fa = a[req.query.sort].toLowerCase(),
-            fb = b[req.query.sort].toLowerCase();
+          let fa = a[req.query.sort],
+            fb = b[req.query.sort];
+
+          try {
+            fa = fa.toLowerCase();
+            fb = fb.toLowerCase();
+          } catch (e) {
+            console.log("not a string");
+          }
 
           if (fa < fb) {
             return -1;
