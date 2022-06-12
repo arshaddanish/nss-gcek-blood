@@ -9,7 +9,13 @@
           <p class="message">
             <% if (messages.error) { %> <%= messages.error %> <% } %>
           </p>
-          <form role="form" action="/register" method="POST" id="contact-form">
+          <form
+            role="form"
+            action="/register"
+            enctype="multipart/form-data"
+            method="POST"
+            id="contact-form"
+          >
             <div class="form-group">
               <label for="name">Name*</label>
               <input
@@ -162,6 +168,7 @@
                 id="user_blood"
                 name="blood"
                 data-msg="Please Select Your Blood Group"
+                return
                 required
               >
                 <option value="" disabled selected hidden>
@@ -188,9 +195,9 @@
                 data-msg="Anything to add?"
               ></textarea>
             </div>
-
+            <h4>Are you a previous donor?</h4>
             <div class="form-group">
-              <label for="date">Date of last donation (If donated)</label>
+              <label for="date">Date of last donation</label>
               <input
                 type="date"
                 class="form-control"
@@ -199,6 +206,17 @@
                 value=""
                 placeholder="Please Enter Donated Date"
                 data-msg="Please Enter Donated Date"
+              />
+            </div>
+            <div class="form-group">
+              <label for="photo">Any photo taken while donating</label>
+              <input
+                type="file"
+                class="form-control"
+                id="user_photo"
+                name="photo"
+                value=""
+                data-msg="Please Upload Donating Photo"
               />
             </div>
 

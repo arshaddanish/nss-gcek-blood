@@ -2,10 +2,13 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const flash = require("express-flash");
+const fs = require("fs");
 const session = require("express-session");
 const { Parser } = require("json2csv");
 const initializePassport = require("./config/passport-config");
-const { Users } = require("./config/mongoose-config");
+const { Users, Donations } = require("./config/mongoose-config");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 require("dotenv").config();
 
 initializePassport(
@@ -84,7 +87,7 @@ app.get("/logout", forwardAuthenticated, (req, res) => {
   res.redirect("/login");
 });
 
-app.post("/register", async (req, res) => {
+app.post("/register", upload.single("photo"), async (req, res) => {
   try {
     const check = await Users.findOne({ email: req.body.email });
     if (check) {
@@ -114,8 +117,9 @@ app.post("/register", async (req, res) => {
         res.redirect("/register");
       } else {
         const hash = await bcrypt.hash(req.body.password, 10);
+        const now = Date.now().toString();
         const user = new Users({
-          id: Date.now().toString(),
+          id: now,
           name: req.body.name,
           email: req.body.email,
           phone: req.body.phone,
@@ -132,6 +136,25 @@ app.post("/register", async (req, res) => {
           admin: false,
         });
         await user.save();
+
+        if (req.body.date) {
+          let temp;
+          if (req.body.photo) {
+            let img = fs.readFileSync(req.file.path);
+            temp = img.toString("base64");
+          }
+          const donation = new Donations({
+            id: new Date().getTime().toString() + req.body.email,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            date: req.body.date,
+            image: req.body.photo
+              ? "data:" + req.file.mimetype + ";base64," + temp
+              : "",
+          });
+          await donation.save();
+        }
         res.redirect("/login");
       }
     }
@@ -207,7 +230,6 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
               branch: !!req.body.branch ? req.body.branch : req.user.branch,
               blood: !!req.body.blood ? req.body.blood : req.user.blood,
               note: req.body.note.replace(/\n/g, ","),
-              date: req.body.date,
             },
           }
         );
@@ -220,6 +242,51 @@ app.post("/user", forwardAuthenticated, async (req, res) => {
     res.redirect("/user");
   }
 });
+
+app.post(
+  "/donation",
+  forwardAuthenticated,
+  upload.single("photo"),
+  async (req, res) => {
+    try {
+      if (req.body.date) {
+        let temp;
+        if (req.body.photo) {
+          let img = fs.readFileSync(req.file.path);
+          temp = img.toString("base64");
+        }
+        const donation = new Donations({
+          id: new Date().getTime().toString() + req.user.email,
+          name: req.user.name,
+          email: req.user.email,
+          phone: req.user.phone,
+          date: req.body.date,
+          image: req.body.photo
+            ? "data:" + req.file.mimetype + ";base64," + temp
+            : "",
+        });
+        await donation.save();
+        let a = new Date(req.user.date);
+        let b = new Date(req.body.date);
+        if (req.user.date?.length == 0 || b > a) {
+          await Users.updateOne(
+            { email: req.user.email },
+            {
+              $set: {
+                date: req.body.date,
+              },
+            }
+          );
+        }
+
+        res.redirect("/user");
+      }
+    } catch (e) {
+      console.log(e);
+      res.redirect("/register");
+    }
+  }
+);
 
 app.get("/data", forwardAuthenticated, async (req, res) => {
   if (req.user.admin) {
@@ -348,8 +415,10 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
       req.query.filter ? { blood: req.query.filter } : {}
     );
 
-    users = users.map((doc) => {
-      return {
+    for (let i = 0; i < users.length; i++) {
+      let doc = users[i];
+      let donations = await Donations.count({ email: doc.email });
+      users[i] = {
         name: doc.name,
         email: doc.email,
         phone: doc.phone,
@@ -362,12 +431,15 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
         blood: doc.blood,
         note: doc.note,
         date: doc.date,
+        donation_count: donations,
         admin: doc.admin,
       };
-    });
+    }
 
     if (req.query.sort && req.query.order) {
-      if (["age", "height", "weight"].includes(req.query.sort)) {
+      if (
+        ["age", "height", "weight", "donation_count"].includes(req.query.sort)
+      ) {
         users = users.sort((a, b) => {
           return req.query.order == "ac"
             ? a[req.query.sort] - b[req.query.sort]
@@ -441,7 +513,6 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
 
         a = new Date(a.date);
         let b = new Date();
-        console.log(b, (b - a) / 90);
         return (b - a) / 90 >= 86400000 ? true : false;
       });
     }
@@ -461,6 +532,7 @@ app.get("/view-data", forwardAuthenticated, async (req, res) => {
           "blood",
           "note",
           "date",
+          "donation_count",
           "admin",
         ],
       });

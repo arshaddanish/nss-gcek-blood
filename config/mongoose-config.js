@@ -45,4 +45,13 @@ const Users = mongoose.model("users", {
   admin: Boolean,
 });
 
-module.exports = { Users };
+const Donations = mongoose.model("donations", {
+  id: String,
+  name: String,
+  email: String,
+  phone: String,
+  date: String,
+  image: String,
+});
+
+module.exports = { Users, Donations };
