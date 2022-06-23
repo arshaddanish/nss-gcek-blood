@@ -52,6 +52,8 @@ const Donations = mongoose.model("donations", {
   phone: String,
   date: String,
   image: String,
+  patient: String,
+  place: String,
 });
 
 module.exports = { Users, Donations };

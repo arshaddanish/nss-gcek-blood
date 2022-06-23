@@ -152,6 +152,8 @@ app.post("/register", upload.single("photo"), async (req, res) => {
             image: req.body.photo
               ? "data:" + req.file.mimetype + ";base64," + temp
               : "",
+            patient: req.body.patient,
+            place: req.body.place,
           });
           await donation.save();
         }
@@ -264,6 +266,8 @@ app.post(
           image: req.body.photo
             ? "data:" + req.file.mimetype + ";base64," + temp
             : "",
+          patient: req.body.patient,
+          place: req.body.place,
         });
         await donation.save();
         let a = new Date(req.user.date);
